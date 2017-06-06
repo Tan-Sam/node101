@@ -21,7 +21,7 @@ module.exports = function(app){
 
   app.post('/candies', (req, res)=>{
     candies.push(req.body);
-    res.json(candies);
+    res.json("{ok}");
   });
 
   app.put('/candies/:id', (req, res)=>{
@@ -30,18 +30,31 @@ module.exports = function(app){
         return elem.id === passedInId;
       });
 
-      tka = req.body;
+      if (tka !== null) {
 
-      
-
+        var indx = candies.indexOf(tka);
+        candies[indx] = req.body;
+        res.json("{put ok}");
+      }
+      else {
+        res.json("{put not ok =( }");
+      }
   });
 
   // app.index('/candy', (req, res)=>{
   //   res.json(req.headers);
   // });
 
-  app.delete('/candy', (req, res)=>{
-    res.json(req.headers);
+  app.delete('/candies/:id', (req, res)=>{
+    const idToDelete = parseInt(req.params.id);
+    var itemToDelete = candies.find((elem)=>{
+      return elem.id === idToDelete;
+    });
+
+    var indx = candies.indexOf(itemToDelete);
+
+    candies.splice(indx,1);
+    res.json("{del ok}");
   });
 
   // app.get('/candy', (req, res)=>{
